@@ -1,0 +1,2200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0c0d">
+  <title>NOT YET! · AI Engineering Grimoire</title>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0c0d;
+      --panel: #141619e8;
+      --panel-light: #1d2025;
+      --text: #f2f0e9;
+      --muted: #aaaeb7;
+      --gold: #e8c477;
+      --red: #ed6868;
+      --green: #91d5ad;
+      --line: #ffffff17;
+      --radius: 19px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 90% 0%, #72232325, transparent 40%),
+        radial-gradient(ellipse at 0% 35%, #8b702011, transparent 40%),
+        var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", system-ui, sans-serif;
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .12;
+      background-image:
+        linear-gradient(#ffffff09 1px, transparent 1px),
+        linear-gradient(90deg, #ffffff09 1px, transparent 1px);
+      background-size: 42px 42px;
+      z-index: -1;
+    }
+
+    button, input, select { font: inherit; }
+
+    button, summary { cursor: pointer; }
+
+    button {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 15px;
+      color: var(--text);
+      background: #ffffff06;
+    }
+
+    button:hover:not(:disabled) {
+      background: #ffffff10;
+      border-color: #e8c47766;
+    }
+
+    button:disabled { opacity: .55; cursor: not-allowed; }
+
+    :focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 4px;
+    }
+
+    a { color: var(--gold); }
+
+    h1, h2, h3, h4, p { margin-top: 0; }
+
+    h1, h2, h3 { line-height: 1.2; }
+
+    .app {
+      display: grid;
+      grid-template-columns: 258px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 28px 19px;
+      border-right: 1px solid var(--line);
+      background: #0c0e11dd;
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -.06em;
+    }
+
+    .brand span { color: var(--gold); }
+
+    .brand-caption {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      margin-bottom: 27px;
+    }
+
+    .nav-heading, .eyebrow {
+      color: var(--gold);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: .17em;
+      font-weight: 700;
+    }
+
+    .nav-heading { margin: 22px 8px 9px; }
+
+    .nav-link {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 3px;
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+      background: #e8c4770c;
+    }
+
+    .nav-link span:first-child {
+      color: var(--gold);
+      font-family: monospace;
+    }
+
+    .side-note {
+      margin-top: 28px;
+      padding: 15px;
+      border: 1px solid #e8c47729;
+      border-radius: 13px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .side-note strong { display: block; color: var(--text); }
+
+    main {
+      min-width: 0;
+      max-width: 1300px;
+      width: 100%;
+      margin: auto;
+      padding: 25px 36px 50px;
+    }
+
+    .topbar, .actions, .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .topbar { margin-bottom: 24px; }
+
+    .pill {
+      border: 1px solid var(--line);
+      padding: 6px 11px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .glass {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+      border-radius: var(--radius);
+      box-shadow: 0 18px 45px #00000020;
+    }
+
+    .hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      align-items: center;
+      overflow: hidden;
+      padding: 38px;
+      min-height: 340px;
+      border-color: #e8c47728;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 350px;
+      height: 350px;
+      right: -100px;
+      top: -120px;
+      border-radius: 50%;
+      background: #b52c2c18;
+      filter: blur(35px);
+      pointer-events: none;
+    }
+
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(40px, 5.5vw, 76px);
+      font-weight: 900;
+      letter-spacing: -.065em;
+      margin: 16px 0;
+    }
+
+    h1 span { color: var(--gold); }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 550px;
+      font-size: 14px;
+    }
+
+    .primary {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #1a1711;
+      font-weight: 800;
+    }
+
+    .primary:hover:not(:disabled) {
+      background: #f4d99e;
+      color: #1a1711;
+    }
+
+    .art { margin: 0; text-align: center; position: relative; }
+
+    .art svg {
+      width: 100%;
+      max-width: 290px;
+      filter: drop-shadow(0 0 24px #d649491a);
+    }
+
+    .battle-cry {
+      display: block;
+      margin-top: -10px;
+      font-size: 30px;
+      font-weight: 950;
+      font-style: italic;
+      letter-spacing: -.06em;
+      color: var(--red);
+      transform: rotate(-5deg);
+      text-shadow: 3px 3px #000;
+    }
+
+    .art small { color: var(--muted); font-size: 10px; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 13px;
+      margin: 18px 0;
+    }
+
+    .stat { padding: 20px; }
+
+    .stat strong {
+      display: block;
+      font-size: 27px;
+      font-weight: 800;
+      letter-spacing: -.04em;
+    }
+
+    .stat span { color: var(--muted); font-size: 11px; }
+
+    .progress-card { padding: 20px; margin-bottom: 20px; }
+
+    progress {
+      display: block;
+      width: 100%;
+      height: 9px;
+      margin: 15px 0;
+      border: 0;
+      border-radius: 99px;
+      overflow: hidden;
+      background: #ffffff0c;
+      accent-color: var(--gold);
+    }
+
+    progress::-webkit-progress-bar { background: #ffffff0c; }
+
+    progress::-webkit-progress-value {
+      background: linear-gradient(90deg, #976a32, var(--gold));
+    }
+
+    progress::-moz-progress-bar { background: var(--gold); }
+
+    #status {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 18px 0 30px;
+    }
+
+    .principle {
+      border-left: 2px solid #e8c47750;
+      padding: 4px 13px;
+    }
+
+    .principle strong { font-size: 13px; }
+
+    .principle p {
+      margin: 6px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .section-heading { margin: 28px 0 14px; }
+
+    .section-heading h2 {
+      font-family: Georgia, serif;
+      font-size: 29px;
+      margin-bottom: 6px;
+    }
+
+    .section-heading p { font-size: 13px; color: var(--muted); }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    input[type="search"], select {
+      width: 100%;
+      background: #17191e;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      padding: 12px 14px;
+    }
+
+    input::placeholder { color: #9b9faa; }
+
+    .part-heading {
+      margin: 29px 0 12px;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: .14em;
+    }
+
+    .module { overflow: hidden; margin-bottom: 13px; scroll-margin-top: 18px; }
+
+    summary { list-style: none; }
+
+    summary::-webkit-details-marker { display: none; }
+
+    .module > summary {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 21px;
+    }
+
+    .module > summary::after {
+      content: "+";
+      color: var(--gold);
+      margin-left: auto;
+      font-size: 24px;
+    }
+
+    .module[open] > summary::after { content: "−"; }
+
+    .module-number {
+      width: 42px;
+      height: 48px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border: 1px solid #e8c47735;
+      border-radius: 5px 12px 5px 12px;
+      background: #e8c47708;
+      color: var(--gold);
+      font-family: Georgia, serif;
+      font-size: 22px;
+    }
+
+    .module-name { display: block; font-weight: 750; font-size: 16px; }
+
+    .module-meta { color: var(--muted); font-size: 11px; }
+
+    .module-body { padding: 0 21px 22px; }
+
+    .module-intro { color: var(--muted); font-size: 13px; }
+
+    .unit {
+      margin: 11px 0;
+      border: 1px solid var(--line);
+      background: #ffffff02;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .unit > summary {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 15px;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .unit > summary::after {
+      content: "⌄";
+      color: var(--gold);
+      margin-left: auto;
+    }
+
+    .unit[open] > summary::after { content: "⌃"; }
+
+    .unit-state {
+      display: grid;
+      place-items: center;
+      width: 23px;
+      height: 23px;
+      border: 1px solid #ffffff30;
+      border-radius: 50%;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    .unit.complete .unit-state {
+      color: #121b14;
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    .unit-content { padding: 0 18px 18px; }
+
+    .unit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 22px;
+    }
+
+    .unit h4, .project h4 {
+      color: var(--gold);
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: .13em;
+      margin: 15px 0 8px;
+    }
+
+    .unit ul, .unit ol, .project ul {
+      padding-left: 20px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .unit li, .project li { margin-bottom: 7px; }
+
+    .application {
+      background: #e8c47708;
+      border-left: 2px solid #e8c47766;
+      padding: 11px 13px;
+      margin: 17px 0;
+      border-radius: 0 8px 8px 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .application strong { color: var(--text); }
+
+    .completion-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--green);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .project {
+      margin-top: 18px;
+      padding: 17px;
+      border: 1px solid #e8c47733;
+      border-radius: 12px;
+      background: linear-gradient(110deg, #e8c47709, #9e2d2d07);
+    }
+
+    .project h3 { font-size: 16px; margin: 7px 0 10px; }
+
+    .project p { font-size: 13px; color: var(--muted); }
+
+    .project .completion-label { margin-top: 17px; }
+
+    .badges { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .badge {
+      padding: 5px 9px;
+      background: #91d5ad0d;
+      border: 1px solid #91d5ad25;
+      color: var(--green);
+      border-radius: 7px;
+      font-size: 10px;
+      margin-top: 12px;
+    }
+
+    .info-panel { padding: 22px; margin-top: 20px; }
+
+    .info-panel p, .info-panel li {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    footer {
+      margin-top: 35px;
+      color: var(--muted);
+      font-size: 11px;
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
+    }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 1100px) {
+      .app { grid-template-columns: 210px minmax(0, 1fr); }
+      main { padding: 22px; }
+      .hero { padding: 25px; }
+    }
+
+    @media (max-width: 820px) {
+      .app { display: block; }
+      .sidebar { display: none; }
+      .hero { grid-template-columns: 1fr .7fr; }
+      .unit-grid { grid-template-columns: 1fr; gap: 0; }
+    }
+
+    @media (max-width: 570px) {
+      main { padding: 15px; }
+      .hero { grid-template-columns: 1fr; }
+      .art { margin-top: 20px; }
+      .art svg { max-width: 175px; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .principles { grid-template-columns: 1fr; }
+      .toolbar { grid-template-columns: 1fr; }
+      .module > summary { padding: 15px; gap: 10px; }
+      .module-body { padding: 0 13px 15px; }
+      .module-name { font-size: 14px; }
+      .actions { gap: 7px; }
+      button { padding: 9px 11px; font-size: 12px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+
+<body>
+<div class="app">
+  <aside class="sidebar" aria-label="Course navigation">
+    <div class="brand">NOT <span>YET!</span></div>
+    <div class="brand-caption">The engineering grimoire</div>
+    <nav id="navigation"></nav>
+    <div class="side-note">
+      <strong>Your daily training</strong>
+      5 min recall · 15 min theory · 10 min discussion ·
+      25 min practice · 5 min reflection.
+      <br><br>
+      Progress through understanding—not through rushing.
+    </div>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <span class="pill" id="mode">Starting your grimoire…</span>
+      <div class="actions">
+        <button id="exportButton">Export progress</button>
+        <button id="shareButton">Share</button>
+        <button id="authButton">Cloud setup</button>
+      </div>
+    </header>
+
+    <section class="hero glass">
+      <div>
+        <div class="eyebrow">AI Engineering · 24-week foundation</div>
+        <h1>No shortcuts.<br><span>Build your power.</span></h1>
+        <p>
+          A structured journey from evaluating predictions to deploying
+          reliable AI systems. Every chapter includes concepts, questions,
+          applied exercises, and evidence of mastery.
+        </p>
+        <button class="primary" id="continueButton">Continue my training →</button>
+      </div>
+
+      <figure class="art">
+        <!-- Original grimoire/sword artwork; no franchise image assets. -->
+        <svg viewBox="0 0 300 290" role="img" aria-labelledby="artTitle">
+          <title id="artTitle">
+            Original dark grimoire, five-leaf clover emblem, and sword
+          </title>
+          <defs>
+            <linearGradient id="book" x2="1" y2="1">
+              <stop stop-color="#303137"/>
+              <stop offset="1" stop-color="#111216"/>
+            </linearGradient>
+            <linearGradient id="blade" x2="1" y2="0">
+              <stop stop-color="#101115"/>
+              <stop offset=".48" stop-color="#5c5c61"/>
+              <stop offset=".52" stop-color="#212329"/>
+              <stop offset="1" stop-color="#090a0c"/>
+            </linearGradient>
+          </defs>
+
+          <circle cx="150" cy="145" r="115" fill="none"
+            stroke="#e8c47725" stroke-dasharray="3 10"/>
+          <circle cx="150" cy="145" r="98" fill="none" stroke="#ed686825"/>
+          <path d="M33 166L66 128L46 108L82 94M254 89L231 126L263 148L241 179"
+            stroke="#ed6868" stroke-width="3" fill="none" opacity=".5"/>
+
+          <g transform="rotate(24 151 139)">
+            <path d="M133 16L162 16L174 178L150 202L125 179Z"
+              fill="url(#blade)" stroke="#77747a"/>
+            <path d="M112 177L189 177L182 191L117 191Z"
+              fill="#29292e" stroke="#b39962"/>
+            <path d="M142 191H158V247H142Z" fill="#342b28" stroke="#81714e"/>
+            <path d="M142 202L158 211M142 218L158 227M142 234L158 242"
+              stroke="#b79e72"/>
+          </g>
+
+          <g transform="rotate(-12 141 159)">
+            <path d="M78 83H195L213 102V234H86L seventy 0"
+              fill="none"/>
+            <rect x="73" y="80" width="133" height="156" rx="7"
+              fill="#090a0d" stroke="#8d7546" stroke-width="2"/>
+            <path d="M83 88H198V227H83Z"
+              fill="url(#book)" stroke="#e8c47755"/>
+            <path d="M94 101H184V212H94Z" fill="none" stroke="#e8c47730"/>
+            <path d="M73 88V225" stroke="#e8c47780" stroke-width="5"/>
+            <path d="M97 102L106 113M181 102L172 113M97 211L108 199M181 211L172 199"
+              stroke="#e8c477" stroke-width="2"/>
+            <g fill="#18191d" stroke="#b59962" stroke-width="1.2">
+              <path d="M140 158C113 143 119 127 130 132C137 121 153 132 140 158Z"/>
+              <path d="M140 158C155 131 171 138 165 149C177 155 166 172 140 158Z"/>
+              <path d="M140 158C169 167 166 184 153 181C151 193 132 186 140 158Z"/>
+              <path d="M140 158C134 187 116 188 115 174C102 174 105 153 140 158Z"/>
+              <path d="M140 158C110 161 103 146 116 140C114 126 135 128 140 158Z"/>
+            </g>
+            <path d="M140 158L150 193" stroke="#b59962" stroke-width="2"/>
+          </g>
+
+          <path d="M47 222L53 209L59 222L72 228L59 234L53 247L47 234L34 228Z"
+            fill="#e8c477"/>
+        </svg>
+        <figcaption>
+          <span class="battle-cry">“NOT YET!”</span>
+          <small>Asta-inspired determination. Original visual artwork.</small>
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="stats" aria-label="Progress statistics">
+      <div class="stat glass"><strong id="percent">0%</strong><span>Self-reported completion</span></div>
+      <div class="stat glass"><strong id="xp">0</strong><span>Training XP · 10 per checkpoint</span></div>
+      <div class="stat glass"><strong id="mastered">0/12</strong><span>Chapters completed</span></div>
+      <div class="stat glass"><strong>168h</strong><span>Planned study—not logged time</span></div>
+    </section>
+
+    <section class="progress-card glass">
+      <div class="row">
+        <strong id="progressLabel">Opening your grimoire…</strong>
+        <span class="pill" id="rank">Initiate</span>
+      </div>
+      <progress id="overallProgress" max="100" value="0"
+        aria-label="Overall curriculum completion"></progress>
+      <p id="status" role="status" aria-live="polite"></p>
+      <div class="badges" id="badges"></div>
+    </section>
+
+    <section class="principles" aria-label="Learning principles">
+      <div class="principle">
+        <strong>01 · Explain it</strong>
+        <p>Answer conceptual questions without relying on memorized phrases.</p>
+      </div>
+      <div class="principle">
+        <strong>02 · Build it</strong>
+        <p>Turn theory into small, reproducible experiments and working systems.</p>
+      </div>
+      <div class="principle">
+        <strong>03 · Challenge it</strong>
+        <p>Measure failures, question assumptions, and understand consequences.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="curriculumTitle">
+      <div class="section-heading">
+        <h2 id="curriculumTitle">Your twelve grimoires</h2>
+        <p>
+          Fundamentals → machine learning → language models → reliable systems.
+          Open any learning unit to see its scope, questions, and exercise.
+        </p>
+      </div>
+
+      <div class="toolbar">
+        <input id="search" type="search" aria-label="Search curriculum"
+          placeholder="Search concepts, questions, projects…">
+        <select id="filter" aria-label="Filter learning units">
+          <option value="all">All learning units</option>
+          <option value="remaining">Not completed</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
+
+      <div id="curriculum"></div>
+      <p id="emptyMessage" hidden>No matching learning units. Try another search.</p>
+    </section>
+
+    <section class="info-panel glass">
+      <h2>How mastery is assessed</h2>
+      <p>
+        Complete a learning unit only after you can answer its questions,
+        attempt its exercise, and explain at least one limitation.
+        Completion is self-reported, not automatic grading.
+      </p>
+      <ul>
+        <li>Each chapter: approximately 14 hours across two weeks.</li>
+        <li>Typical allocation: 4h concepts, 2h demonstrations, 5h implementation, 2h evaluation, 1h review.</li>
+        <li>Projects are included in the 168-hour plan—not extra homework.</li>
+        <li>Capstone: guided integration. Final project: independent problem-solving.</li>
+        <li>Final rubric: framing 15%, implementation 20%, evaluation 25%, reliability/security 20%, user experience 10%, documentation 10%.</li>
+        <li>The schedule is flexible. This is a degree-inspired foundation, not a replacement for a full university degree.</li>
+      </ul>
+    </section>
+
+    <section class="info-panel glass">
+      <h2>After the foundation</h2>
+      <p>
+        Optional specializations—not included in the 168-hour core:
+        computer vision, multimodal systems, speech, recommendations,
+        reinforcement learning, production fine-tuning and LoRA,
+        quantization, distributed training, advanced MLOps, research-paper
+        reproduction, and advanced AI security.
+      </p>
+    </section>
+
+    <footer>
+      Unofficial fan-inspired learning dashboard. No affiliation with Black Clover
+      or its rights holders. Artwork is original SVG.
+      <br>
+      Public cloud mode shares course progress—not private study records.
+      Browser mode stores progress only on the current browser.
+    </footer>
+  </main>
+</div>
+
+<script type="module">
+  /*
+   * OPTIONAL CLOUD SETUP
+   *
+   * 1. Paste your Firebase web app configuration below.
+   * 2. Enable Google sign-in and create Firestore.
+   * 3. Set OWNER_UID to your Firebase Authentication user UID.
+   * 4. Authorize localhost and your published hostname in Firebase Auth.
+   * 5. Publish the Firestore rules provided after this HTML.
+   *
+   * Leave configuration blank for browser-only tracking.
+   * Never put service-account credentials in this file.
+   */
+  const FIREBASE_CONFIG = {
+   apiKey: "AIzaSyDv1Xv2SBOcDaRP_U4gqx9sKYpXBOEbXJE",
+  authDomain: "i-ai-d0886.firebaseapp.com",
+  projectId: "i-ai-d0886",
+  storageBucket: "i-ai-d0886.firebasestorage.app",
+  messagingSenderId: "679046068103",
+  appId: "1:679046068103:web:f812a57da639f961f7c522",
+  measurementId: "G-4GQ41GQQWL"
+  };
+
+  const OWNER_UID = "0lOSUxRBxwejkG6KKLhVwnmSpEY2";
+  const LOCAL_STORAGE_KEY = "ai-grimoire-progress-v2";
+
+  /*
+   * Stable IDs protect progress when titles change.
+   * These grouped checkpoints are a new curriculum version.
+   * Old module_index marks are not automatically mapped to the new groups.
+   */
+  const unit = (id, title, topics, questions, exercise) => ({
+    id, title, topics, questions, exercise
+  });
+
+  const curriculum = [
+    {
+      id: "foundations",
+      part: "I · Foundations",
+      title: "Thinking Like an AI Engineer",
+      weeks: "1–2",
+      objective: "Understand what models do, how to evaluate predictions, and why application decisions matter.",
+      units: [
+        unit("landscape", "The AI landscape and problem framing", [
+          "AI, machine learning, deep learning, and generative AI",
+          "AI engineering versus data science and research",
+          "Rules versus learned behavior; when not to use AI",
+          "Classification, regression, and generation"
+        ], [
+          "How are AI, ML, deep learning, and generative AI related?",
+          "When is a deterministic rule preferable to a learned model?",
+          "Why is calling an AI API not the whole engineering task?"
+        ], "Classify spam filtering, tax calculation, delivery-time prediction, and response drafting. Justify where AI is appropriate."),
+
+        unit("model-basics", "What a model learns and predicts", [
+          "Inputs, features, actual labels, and predictions",
+          "Parameters and learned patterns",
+          "Training versus inference",
+          "Baselines and representative examples"
+        ], [
+          "How do features, parameters, and labels differ?",
+          "Does using a model necessarily retrain it?",
+          "Why should a complex system be compared with a simple baseline?"
+        ], "Describe an email as raw input, possible features, actual label, and prediction. Define an always-legitimate baseline."),
+
+        unit("metrics", "Classification outcomes and metrics", [
+          "Positive-class definition",
+          "True positives, true negatives, false positives, false negatives",
+          "Confusion matrices, accuracy, precision, and recall",
+          "Undefined denominators and class imbalance"
+        ], [
+          "What differs between the denominators of precision and recall?",
+          "How can a useless spam filter achieve high accuracy?",
+          "When are precision, recall, or accuracy undefined?"
+        ], "Use 100 emails: 20 spam, 80 legitimate. Of 10 flagged emails, 9 are spam. Calculate every confusion count and all three metrics."),
+
+        unit("generalization", "Generalization and changing data", [
+          "Training performance versus unseen-test performance",
+          "Overfitting and underfitting",
+          "Representative evaluation data",
+          "Distribution shift and trustworthy reference labels"
+        ], [
+          "Can an unchanged model become less accurate?",
+          "Why does a training–test gap suggest—but not fully diagnose—overfitting?",
+          "Does changed wording alone prove performance decreased?"
+        ], "Design a recent-email evaluation after legitimate university messages begin using wording previously associated with spam."),
+
+        unit("decisions", "Prediction, action, and human consequences", [
+          "Error costs and product requirements",
+          "Warnings, folders, deletion, and reversibility",
+          "Human review and warning fatigue",
+          "User research, observed behavior, and acceptable error limits"
+        ], [
+          "Does replacing deletion with warnings change model accuracy?",
+          "Why is zero false positives insufficient to establish usefulness?",
+          "What behavior would show that warnings cause harm?"
+        ], "Design a hospital email warning system. Define its main risk, useful benefit, and a measurable usability test.")
+      ],
+      project: "Email Prediction Evaluator",
+      deliverables: [
+        "Python functions for confusion counts, accuracy, precision, and recall.",
+        "Validation for unequal lengths, empty datasets, and invalid labels.",
+        "Hand-checked tests and an explicit undefined-metric policy.",
+        "Comparison of two filters with a user-focused recommendation."
+      ],
+      defense: "Explain why no single metric determines whether the system should be deployed."
+    },
+
+    {
+      id: "python",
+      part: "I · Foundations",
+      title: "Python and Data Engineering Essentials",
+      weeks: "3–4",
+      objective: "Work confidently with datasets and reproducible Python programs. Skip familiar syntax quickly.",
+      units: [
+        unit("language", "Python for practical AI work", [
+          "Lists, dictionaries, tuples, sets, indexing, and slicing",
+          "Functions, return values, comprehensions, and modules",
+          "range, zip, enumerate, exceptions, and type hints",
+          "Equality, mutation, and readable program structure"
+        ], [
+          "When is a dictionary more suitable than a list?",
+          "What happens when zip receives unequal-length inputs?",
+          "Why separate metric logic from printing and user-interface code?"
+        ], "Refactor the evaluator into small functions with clear inputs, outputs, and error handling."),
+
+        unit("environment", "Environments and reproducibility", [
+          "VS Code interpreter selection and virtual environments",
+          "Package installation and dependency files",
+          "Scripts versus notebooks",
+          "Git commits, .gitignore, environment variables, and secrets"
+        ], [
+          "Why isolate project dependencies?",
+          "How would another person reproduce your environment?",
+          "Why must credentials stay out of a public repository?"
+        ], "Create an environment, dependency file, README, and clean initial Git commit."),
+
+        unit("arrays", "Numerical and tabular structures", [
+          "NumPy arrays, dimensions, shapes, and vectorization",
+          "pandas DataFrames, selection, filtering, and grouping",
+          "Data types and conversions",
+          "Reading CSV and JSON"
+        ], [
+          "How does an array's shape affect valid operations?",
+          "Why can vectorized calculations outperform Python loops?",
+          "How would you inspect label counts and missing values?"
+        ], "Load a small labeled dataset and produce a class-count table and missing-value summary."),
+
+        unit("quality", "Data quality and exploratory analysis", [
+          "Missing values, duplicates, inconsistent labels, and outliers",
+          "Summary statistics and simple plots",
+          "Data dictionaries and provenance",
+          "Dataset licenses, privacy, and authorized use"
+        ], [
+          "Why can removing every incomplete row introduce bias?",
+          "How can duplicates contaminate evaluation?",
+          "What information belongs in a data-quality report?"
+        ], "Audit a dataset and justify each cleaning action instead of silently deleting problematic records."),
+
+        unit("testing", "Testing small data programs", [
+          "Assertions and unit tests with pytest",
+          "Boundary cases and known-answer examples",
+          "Random seeds and reproducibility limitations",
+          "Debugging with minimal reproducible examples"
+        ], [
+          "Which tests would catch a swapped precision denominator?",
+          "What does fixing a random seed guarantee—and not guarantee?",
+          "How do tests differ from exploratory checks?"
+        ], "Write tests for correct predictions, false positives, missed spam, empty input, and mismatched lengths.")
+      ],
+      project: "Dataset Audit and Tested Evaluator",
+      deliverables: [
+        "Reproducible dataset inspection and cleaning script.",
+        "Data dictionary and quality report.",
+        "Plots of class distributions and relevant anomalies.",
+        "Passing unit tests and setup instructions."
+      ],
+      defense: "Explain how each cleaning choice could change model evaluation."
+    },
+
+    {
+      id: "math",
+      part: "I · Foundations",
+      title: "Mathematics and Statistical Reasoning",
+      weeks: "5–6",
+      objective: "Develop the numerical intuition needed to interpret models and measurements—not memorize proofs.",
+      units: [
+        unit("vectors", "Vectors, matrices, and geometry", [
+          "Scalars, vectors, matrices, and dimensions",
+          "Dot products, norms, and normalization",
+          "Matrix multiplication and compatible shapes",
+          "Euclidean distance, cosine similarity, and embedding intuition"
+        ], [
+          "What does a dot product measure geometrically?",
+          "How do distance and cosine similarity differ?",
+          "Why must matrix dimensions be checked before multiplication?"
+        ], "Compare three vectors using distance and cosine similarity, then explain why the rankings can differ."),
+
+        unit("probability", "Probability and base rates", [
+          "Events and probability",
+          "Conditional probability and independence",
+          "Base rates and Bayes' rule",
+          "Rare events and interpretation of positive predictions"
+        ], [
+          "Why is P(spam given a flag) not P(flag given spam)?",
+          "How can rare spam make false alarms dominate flagged mail?",
+          "What assumption does independence introduce?"
+        ], "Use counts in a 1,000-email example to explain why a strong detector may still produce unreliable flags."),
+
+        unit("statistics", "Describing data and uncertainty", [
+          "Mean, median, variance, and standard deviation",
+          "Percentiles and outliers",
+          "Samples, populations, and sampling bias",
+          "Confidence-interval intuition and small-test-set instability"
+        ], [
+          "When is the median more informative than the mean?",
+          "Why is an estimate from 10 examples less stable than one from 1,000?",
+          "What does a confidence interval communicate?"
+        ], "Compare the same metric on several small random samples and explain the variation."),
+
+        unit("optimization", "Learning as optimization", [
+          "Functions, predictions, and loss",
+          "Slope, derivatives, and gradient intuition",
+          "Gradient descent and learning rate",
+          "Convergence, instability, and loss curves"
+        ], [
+          "How does a gradient guide a parameter update?",
+          "What happens if the learning rate is too large or too small?",
+          "Why does minimizing training loss not guarantee useful deployment?"
+        ], "Fit a line to small numerical data and plot loss for two learning rates."),
+
+        unit("evidence", "Scientific reasoning about results", [
+          "Correlation versus causation",
+          "Confounding and selection effects",
+          "Measurement uncertainty",
+          "Fair comparisons and limited conclusions"
+        ], [
+          "Why does correlation not establish causation?",
+          "What must remain comparable when evaluating two systems?",
+          "When is a reported improvement too uncertain to trust?"
+        ], "Critique a claim that a new model is better based on two extra correct answers in a tiny test set.")
+      ],
+      project: "Numerical Learning Lab",
+      deliverables: [
+        "Vector-similarity experiment.",
+        "Simple line-fitting implementation.",
+        "Loss plots and learning-rate comparison.",
+        "Written interpretation of uncertainty and limitations."
+      ],
+      defense: "Explain what the numerical results support without overclaiming."
+    },
+
+    {
+      id: "ml",
+      part: "II · Machine Learning",
+      title: "Classical Machine Learning",
+      weeks: "7–8",
+      objective: "Build a supervised-learning pipeline and evaluate it without leakage.",
+      units: [
+        unit("splits", "Task definition and evaluation design", [
+          "Targets, features, and simple baselines",
+          "Training, validation, and test sets",
+          "Stratified and time-aware splitting",
+          "Cross-validation and keeping the test set untouched"
+        ], [
+          "Why use a validation set instead of repeatedly tuning on the test set?",
+          "When is random splitting inappropriate?",
+          "What makes a baseline meaningful?"
+        ], "Design a split strategy for email data collected across several months."),
+
+        unit("features", "Features and preprocessing pipelines", [
+          "Numeric scaling and categorical encoding",
+          "Text counts, bag-of-words, and TF-IDF",
+          "Fitting preprocessing only on training data",
+          "Data leakage and duplicate contamination"
+        ], [
+          "How can preprocessing leak test information?",
+          "What does TF-IDF capture that raw counts may miss?",
+          "Why keep preprocessing and the model in one pipeline?"
+        ], "Build a text-feature pipeline and demonstrate a leakage mistake to avoid."),
+
+        unit("models", "Core supervised models", [
+          "Linear regression and logistic regression",
+          "Decision trees",
+          "Random forests at an introductory level",
+          "Interpretability, complexity, and practical trade-offs"
+        ], [
+          "Why is logistic regression used for classification?",
+          "How does a decision tree partition examples?",
+          "Why can combining trees improve generalization?"
+        ], "Compare two model families on the same split and record errors, not only headline scores."),
+
+        unit("selection", "Regularization and model selection", [
+          "Parameters versus hyperparameters",
+          "Regularization and model complexity",
+          "Search strategies and cross-validation",
+          "Underfitting and overfitting diagnosis"
+        ], [
+          "What is the difference between a parameter and a hyperparameter?",
+          "How can regularization reduce overfitting?",
+          "Why can a larger search overfit the validation process?"
+        ], "Try a small, justified hyperparameter search and report why the selected model was chosen."),
+
+        unit("thresholds", "Thresholds and error analysis", [
+          "Scores, probabilities, and classification thresholds",
+          "Precision–recall trade-offs and F1 limitations",
+          "Probability calibration concepts",
+          "False-positive review and performance across data slices"
+        ], [
+          "How can a threshold change precision and recall without retraining?",
+          "Why is F1 not a universal business objective?",
+          "What does it mean for a probability estimate to be calibrated?"
+        ], "Select a spam threshold under a strict false-positive requirement and explain the lost recall.")
+      ],
+      project: "Trained Spam Classifier",
+      deliverables: [
+        "scikit-learn preprocessing and training pipeline.",
+        "Always-legitimate baseline comparison.",
+        "Validation-based threshold selection and untouched-test report.",
+        "Saved model, error examples, and documented limitations."
+      ],
+      defense: "Justify the split, baseline, threshold, and evidence for generalization."
+    },
+
+    {
+      id: "neural",
+      part: "II · Machine Learning",
+      title: "Neural Networks and Deep Learning",
+      weeks: "9–10",
+      objective: "Train and diagnose a small neural network using PyTorch.",
+      units: [
+        unit("architecture", "Neural-network building blocks", [
+          "Neurons, weights, biases, and layers",
+          "Activation functions and nonlinearity",
+          "Forward passes, logits, and probabilities",
+          "Input and output dimensions"
+        ], [
+          "Why do multiple linear layers need nonlinear activations?",
+          "How do logits differ from probabilities?",
+          "How would you check a network's input and output shapes?"
+        ], "Draw and implement a small feed-forward classifier with explicit tensor shapes."),
+
+        unit("learning", "How networks learn", [
+          "Loss functions",
+          "Backpropagation intuition",
+          "Automatic differentiation",
+          "Optimizers, batches, epochs, and learning rates"
+        ], [
+          "What role does the loss function play?",
+          "What does backpropagation compute?",
+          "How do a batch, an epoch, and an optimizer step differ?"
+        ], "Trace one training step from input to prediction, loss, gradients, and parameter update."),
+
+        unit("pytorch", "PyTorch workflow", [
+          "Tensors and device placement",
+          "Model definitions and data loaders",
+          "Training loops and zeroing gradients",
+          "Evaluation mode, disabled gradients, and saved weights"
+        ], [
+          "Why clear accumulated gradients?",
+          "How does evaluation mode differ from disabling gradients?",
+          "What must be saved to reproduce inference?"
+        ], "Write separate training and evaluation functions and reload a saved model."),
+
+        unit("diagnosis", "Training failures and regularization", [
+          "Learning curves and generalization gaps",
+          "Shape errors and unstable training",
+          "Dropout and early stopping",
+          "Training–evaluation inconsistencies"
+        ], [
+          "What would rising validation loss with falling training loss suggest?",
+          "How can a learning-rate problem appear in a loss curve?",
+          "Why must dropout behave differently during evaluation?"
+        ], "Compare an overfit run with one regularized run and explain the evidence."),
+
+        unit("transfer", "Pretrained models and transfer learning", [
+          "Feature extraction",
+          "Fine-tuning concepts",
+          "Data and compute requirements",
+          "When classical models remain preferable"
+        ], [
+          "How does feature extraction differ from fine-tuning?",
+          "When might pretrained representations help?",
+          "Why should a neural network still face a simple baseline?"
+        ], "Write a model-choice memo for a small dataset with limited compute.")
+      ],
+      project: "Compact Neural Classifier",
+      deliverables: [
+        "Working PyTorch training and evaluation code.",
+        "Learning curves and saved model weights.",
+        "Comparison against a classical baseline.",
+        "Failure analysis and reproducible instructions."
+      ],
+      defense: "Explain one training failure and the evidence that your intervention helped."
+    },
+
+    {
+      id: "llm",
+      part: "III · Language-Model Applications",
+      title: "Language Models and Structured APIs",
+      weeks: "11–12",
+      objective: "Understand language-model behavior and build a validated API-based application.",
+      units: [
+        unit("transformers", "Language-model foundations", [
+          "Tokens, tokenization, and embeddings",
+          "Context windows and next-token prediction",
+          "Attention and transformer blocks conceptually",
+          "Pretraining versus instruction tuning"
+        ], [
+          "Why do token counts differ from word counts?",
+          "What problem does attention help solve?",
+          "How does instruction tuning differ from pretraining?"
+        ], "Inspect tokenization examples and explain an LLM's generation process without claiming human-like understanding."),
+
+        unit("generation", "Generation behavior and limitations", [
+          "Sampling, temperature, and output limits",
+          "Stop conditions and variability",
+          "Hallucinations and unsupported confidence",
+          "Context limits and token-based costs"
+        ], [
+          "Does lowering temperature guarantee correctness?",
+          "Why can fluent output be factually wrong?",
+          "How do long inputs affect cost and context capacity?"
+        ], "Repeat one extraction task under two generation settings and compare consistency."),
+
+        unit("apis", "Reliable model API calls", [
+          "Hosted APIs versus local inference",
+          "Authentication, requests, and responses",
+          "Timeouts, rate limits, retries, and backoff",
+          "Streaming and partial-response handling"
+        ], [
+          "Which failures should be retried?",
+          "Why are unlimited retries dangerous?",
+          "What trade-offs distinguish local and hosted inference?"
+        ], "Build a small model-client wrapper with a timeout and bounded retry policy."),
+
+        unit("prompting", "Prompt design and boundaries", [
+          "Task instructions, context, and examples",
+          "Output requirements",
+          "Instruction hierarchy and untrusted inputs",
+          "Prompt versioning and reproducible evaluation"
+        ], [
+          "What makes a prompt testable rather than merely elaborate?",
+          "Why must document text not automatically become an instruction?",
+          "How would you compare two prompt versions fairly?"
+        ], "Create and evaluate two prompts against the same small extraction dataset."),
+
+        unit("schemas", "Structured output and validation", [
+          "JSON and schema design",
+          "Pydantic validation",
+          "Missing fields and invalid values",
+          "Refusals, incomplete responses, and safe failure handling"
+        ], [
+          "Why is valid JSON not necessarily a valid application result?",
+          "Which constraints belong in a schema?",
+          "How should the application handle a refusal or incomplete output?"
+        ], "Extract category, urgency, and summary from synthetic tickets and reject invalid results.")
+      ],
+      project: "Structured Support-Message Extractor",
+      deliverables: [
+        "Model-client wrapper and versioned prompt.",
+        "Validated output schema.",
+        "Normal, ambiguous, and malformed-input tests.",
+        "Failure handling and basic usage measurements."
+      ],
+      defense: "Show how the application behaves when the model returns an unusable answer."
+    },
+
+    {
+      id: "rag",
+      part: "III · Language-Model Applications",
+      title: "Retrieval-Augmented Generation",
+      weeks: "13–14",
+      objective: "Build a document-grounded assistant and distinguish retrieval failures from answer failures.",
+      units: [
+        unit("purpose", "External knowledge and RAG architecture", [
+          "Model parameters versus external documents",
+          "Retrieval versus fine-tuning",
+          "Ingestion, retrieval, and generation stages",
+          "Limits of grounding and unsupported answers"
+        ], [
+          "When is RAG preferable to fine-tuning?",
+          "Why does adding retrieval not guarantee correctness?",
+          "Which parts of the system need separate evaluation?"
+        ], "Draw a document-assistant architecture and label its potential failure points."),
+
+        unit("ingestion", "Document ingestion and chunking", [
+          "Text and PDF loading",
+          "Parsing failures and cleaning",
+          "Document identifiers, metadata, and source locations",
+          "Chunk size and overlap"
+        ], [
+          "How can bad parsing undermine a good model?",
+          "What trade-offs come with small versus large chunks?",
+          "Why preserve source identifiers and page locations?"
+        ], "Ingest a small authorized collection and manually inspect several chunks."),
+
+        unit("retrieval", "Search and ranking", [
+          "Embeddings and similarity search",
+          "Vector indexes",
+          "Keyword and hybrid-search concepts",
+          "Metadata filters, top-k, and reranking concepts"
+        ], [
+          "When might keyword search outperform semantic search?",
+          "What can increasing top-k help and hurt?",
+          "How do retrieval and reranking differ?"
+        ], "Compare keyword and embedding retrieval on a small set of questions."),
+
+        unit("answers", "Grounded answer construction", [
+          "Context assembly and token budgets",
+          "Citations and source attribution",
+          "Conflicting evidence",
+          "Abstention when evidence is insufficient"
+        ], [
+          "Why is a displayed citation not proof of support?",
+          "How should conflicting documents affect the answer?",
+          "When should the assistant say it cannot determine the answer?"
+        ], "Create questions that are answerable, unsupported, and contradicted by the collection."),
+
+        unit("evaluation", "Retrieval and answer evaluation", [
+          "Reviewed question–document relevance cases",
+          "Recall at k",
+          "Citation correctness",
+          "Retrieval failures versus generation failures"
+        ], [
+          "What does retrieval recall at k measure?",
+          "How can you diagnose a wrong answer when the correct passage was retrieved?",
+          "Why must evaluation include unanswerable questions?"
+        ], "Label relevant documents for a small test set and inspect every incorrect answer.")
+      ],
+      project: "Document Question-Answering Assistant",
+      deliverables: [
+        "Reproducible ingestion and retrieval pipeline.",
+        "Answers linked to source passages.",
+        "Reviewed questions including unsupported cases.",
+        "Separate retrieval and answer-quality findings."
+      ],
+      defense: "Trace a wrong answer back to its actual failure stage."
+    },
+
+    {
+      id: "tools",
+      part: "III · Language-Model Applications",
+      title: "Tools and Constrained Workflows",
+      weeks: "15–16",
+      objective: "Give an assistant useful capabilities without giving it unrestricted authority.",
+      units: [
+        unit("contracts", "Tool interfaces and validation", [
+          "Tool names and descriptions",
+          "Input schemas and validated arguments",
+          "Function execution and structured results",
+          "Tool-output interpretation"
+        ], [
+          "Why is a model-generated tool call only a request?",
+          "What must be validated before execution?",
+          "How should tools report failures?"
+        ], "Implement a calculator or lookup tool with strict allowed inputs."),
+
+        unit("workflow", "Workflows versus agents", [
+          "Deterministic routing",
+          "State and conversation history",
+          "Bounded model-directed loops",
+          "Stop conditions and step budgets"
+        ], [
+          "When is a fixed workflow simpler than an agent?",
+          "What state must survive between steps?",
+          "How do you prevent an unproductive loop?"
+        ], "Draw a workflow for search, optional calculation, and a final grounded answer."),
+
+        unit("execution", "Reliable execution", [
+          "Timeouts and partial failure",
+          "Retries and duplicate actions",
+          "Idempotency",
+          "Execution traces and cost budgets"
+        ], [
+          "Why can retrying an action cause duplicate side effects?",
+          "What makes an operation idempotent?",
+          "What should an execution trace record?"
+        ], "Simulate a failed tool and verify that retries are bounded and observable."),
+
+        unit("permissions", "Authority and human oversight", [
+          "Read-only tools first",
+          "Least privilege",
+          "Human approval for consequential actions",
+          "Untrusted tool output and instruction boundaries"
+        ], [
+          "Why should retrieved text not authorize a tool action?",
+          "Which actions need explicit human approval?",
+          "How does limiting permissions reduce the impact of mistakes?"
+        ], "Define an allowlist of tools and document what the assistant cannot do.")
+      ],
+      project: "Read-Only Study Assistant",
+      deliverables: [
+        "Document search plus calculator or lookup tool.",
+        "Validated schemas and bounded execution.",
+        "Human-readable trace of tool use.",
+        "Timeout, invalid-argument, and stopping tests."
+      ],
+      defense: "Demonstrate that a misleading tool result cannot grant new permissions."
+    },
+
+    {
+      id: "reliability",
+      part: "IV · Reliable Systems",
+      title: "Evaluation, Security, and Human Factors",
+      weeks: "17–18",
+      objective: "Turn an impressive demonstration into an application with measurable behavior and explicit safeguards.",
+      units: [
+        unit("test-design", "Evaluation as an engineering discipline", [
+          "Acceptance criteria and representative test sets",
+          "Normal, edge, and adversarial cases",
+          "Human scoring rubrics",
+          "Regression tests and version comparisons"
+        ], [
+          "How does an acceptance criterion become a test?",
+          "Why must evaluation examples reflect real use?",
+          "How do you avoid selecting only flattering demonstrations?"
+        ], "Write a rubric and build a small reviewed evaluation dataset."),
+
+        unit("answer-quality", "Evaluating generated answers", [
+          "Correctness, completeness, and groundedness",
+          "Citation validity and appropriate abstention",
+          "Automated checks",
+          "Model-judge bias and limitations"
+        ], [
+          "How can an answer be grounded but incomplete?",
+          "Which checks can be automated reliably?",
+          "Why should an LLM judge not be the sole authority?"
+        ], "Score the same answers manually and with a simple automated check; investigate disagreements."),
+
+        unit("security", "Application security and privacy", [
+          "Direct and indirect prompt injection",
+          "Untrusted retrieved content",
+          "Authorization before retrieval",
+          "Secrets, sensitive data, retention, and safe logs"
+        ], [
+          "How does authorization differ from asking the model to keep data private?",
+          "What information should never enter ordinary logs?",
+          "Why is prompt injection a system-design problem?"
+        ], "Test a harmless document instruction attempting to redirect the assistant and verify the application boundary."),
+
+        unit("humans", "Human-centered reliability", [
+          "Warning fatigue and trust",
+          "Useful uncertainty communication",
+          "Accessible warnings and interfaces",
+          "Human approval and feedback interpretation"
+        ], [
+          "Why are more visible warnings not always better?",
+          "How can user feedback be noisy or biased?",
+          "What should be measured beyond button clicks?"
+        ], "Design a usability test for warnings and identify the decisions you want users to make correctly."),
+
+        unit("operations", "Quality, latency, and cost", [
+          "Latency and failure rates",
+          "Token usage and cost per request",
+          "Quality–cost trade-offs",
+          "Risk prioritization and incident scenarios"
+        ], [
+          "Why can an accurate system still be operationally unusable?",
+          "Which failures deserve the highest priority?",
+          "How would you compare a cheaper model without ignoring quality?"
+        ], "Build a scorecard combining quality, errors, latency, and estimated usage cost.")
+      ],
+      project: "Evaluation and Hardening Suite",
+      deliverables: [
+        "Reviewed evaluation dataset and scoring rubric.",
+        "Regression tests and malformed-input cases.",
+        "Risk register with prioritized safeguards.",
+        "Quality, latency, and usage report."
+      ],
+      defense: "Explain which risks remain and why the safeguards are proportionate."
+    },
+
+    {
+      id: "deployment",
+      part: "IV · Reliable Systems",
+      title: "Serving, Deployment, and Monitoring",
+      weeks: "19–20",
+      objective: "Package, serve, observe, and maintain a small AI application.",
+      units: [
+        unit("architecture", "Service architecture", [
+          "API, model-client, retrieval, and configuration layers",
+          "FastAPI endpoints",
+          "Request and response schemas",
+          "Input validation and error responses"
+        ], [
+          "Why separate provider-specific code from application logic?",
+          "What belongs in an API contract?",
+          "How should expected errors differ from unexpected failures?"
+        ], "Expose one assistant endpoint with validated inputs and predictable responses."),
+
+        unit("runtime", "Runtime behavior", [
+          "Authentication concepts",
+          "Concurrency and blocking operations",
+          "Timeouts and cancellation",
+          "Rate limits and request-size limits"
+        ], [
+          "How can a blocking call affect concurrent users?",
+          "Why validate request size before a model call?",
+          "What happens when a dependency takes too long?"
+        ], "Test invalid, oversized, slow, and repeated requests."),
+
+        unit("packaging", "Packaging and deployment", [
+          "Dependencies and environment variables",
+          "Docker fundamentals",
+          "Local versus hosted deployment",
+          "Health checks and reproducible setup"
+        ], [
+          "What does a container package—and not guarantee?",
+          "How are secrets supplied without baking them into an image?",
+          "What should a health check actually test?"
+        ], "Run the application from documented setup steps on a clean environment."),
+
+        unit("observability", "Monitoring and cost controls", [
+          "Structured logs, traces, and request identifiers",
+          "Latency and error metrics",
+          "Caching and invalidation",
+          "Budget controls and fallback responses"
+        ], [
+          "How does tracing help locate a slow stage?",
+          "When can caching return stale or unauthorized information?",
+          "What should happen when the usage budget is reached?"
+        ], "Add request-level timing and a safe fallback for a simulated provider outage."),
+
+        unit("maintenance", "Versioning and recovery", [
+          "Prompt, model, and index versions",
+          "Regression checks before release",
+          "Rollback and dependency outages",
+          "Monitoring data and performance changes"
+        ], [
+          "Why must the index version be tracked alongside the prompt?",
+          "What evidence should block a release?",
+          "How would you roll back a harmful change?"
+        ], "Write a release checklist and rehearse returning to a previous known-good configuration.")
+      ],
+      project: "Deploy the Assistant",
+      deliverables: [
+        "Runnable API and minimal interface.",
+        "Dependency and deployment instructions.",
+        "Health check, safe logs, and basic metrics.",
+        "Failure-handling tests and rollback notes."
+      ],
+      defense: "Demonstrate a dependency failure without exposing secrets or silently losing the request."
+    },
+
+    {
+      id: "capstone",
+      part: "V · Integration and Independence",
+      title: "Guided Capstone: Evidence-Based Assistant",
+      weeks: "21–22",
+      objective: "Integrate prior work into a small, grounded learning assistant. Reuse earlier components.",
+      units: [
+        unit("scope", "Requirements and architecture · 2h", [
+          "User and problem definition",
+          "Authorized document collection",
+          "Acceptance criteria and risk boundaries",
+          "Architecture and component responsibilities"
+        ], [
+          "Who is the user, and what useful outcome should the system provide?",
+          "Which questions or actions are explicitly outside scope?",
+          "How will you judge whether the application is good enough?"
+        ], "Write a one-page specification and draw the end-to-end architecture."),
+
+        unit("build", "Integration and implementation · 6h", [
+          "Document ingestion and retrieval",
+          "Answers with verifiable citations",
+          "Abstention and one read-only tool",
+          "Input validation, failure handling, and a minimal interface"
+        ], [
+          "Can you trace a question through every component?",
+          "What prevents unsupported answers from appearing authoritative?",
+          "How are tool permissions enforced?"
+        ], "Integrate a working vertical slice before adding interface polish."),
+
+        unit("evaluate", "Evaluation and fixes · 3h", [
+          "20–30 reviewed test cases",
+          "Direct and multi-passage questions",
+          "Unsupported, ambiguous, and conflicting evidence",
+          "Misleading document instructions and tool/API failures"
+        ], [
+          "Which errors originate in retrieval rather than generation?",
+          "What fails when evidence is absent?",
+          "Which fix improves the most important failure without hiding others?"
+        ], "Run the complete evaluation, inspect failures, and document one measured improvement."),
+
+        unit("release", "Deployment and documentation · 2h", [
+          "Reproducible setup and deployment",
+          "Architecture diagram",
+          "Privacy, security, and known limitations",
+          "Latency and usage observations"
+        ], [
+          "Can another person run the application from the README?",
+          "What information is stored or logged?",
+          "What limitations must users see before relying on answers?"
+        ], "Ask someone to follow the setup instructions and record every unclear step."),
+
+        unit("defend", "Demonstration and reflection · 1h", [
+          "Successful and failed examples",
+          "Evaluation evidence",
+          "Trade-offs and remaining risks",
+          "Next-step priorities"
+        ], [
+          "What is the strongest evidence that the system is useful?",
+          "What remains unreliable?",
+          "What would you improve first with one additional week?"
+        ], "Deliver a short demonstration that includes a failure and explains it honestly.")
+      ],
+      project: "Evidence-Based Learning Assistant",
+      deliverables: [
+        "Repository and reproducible application.",
+        "Architecture diagram and setup guide.",
+        "Reviewed evaluation set and results.",
+        "Privacy notes, known limitations, and demonstration."
+      ],
+      defense: "Show useful behavior and honest failure handling—not merely a polished happy-path demo."
+    },
+
+    {
+      id: "final",
+      part: "V · Integration and Independence",
+      title: "Independent Final Project",
+      weeks: "23–24",
+      objective: "Independently frame, build, evaluate, and defend a tightly scoped AI solution.",
+      units: [
+        unit("proposal", "Problem definition · 2h", [
+          "Choose email triage, documentation QA, support assistance, or an approved proposal",
+          "Intended users and authorized data",
+          "Measurable acceptance criteria",
+          "Privacy, error consequences, and manageable scope"
+        ], [
+          "Why is AI appropriate for this task?",
+          "Who benefits, and what could go wrong?",
+          "What can realistically be built and tested in the available time?"
+        ], "Write a proposal with explicit non-goals and a measurable definition of success."),
+
+        unit("baseline", "Baseline implementation · 2h", [
+          "Non-AI or simple-model alternative",
+          "Comparable inputs and test cases",
+          "Baseline quality and operational measurements",
+          "Evidence for adding complexity"
+        ], [
+          "What does the simplest useful solution look like?",
+          "How will the AI system prove an improvement?",
+          "What result would make you keep the simpler solution?"
+        ], "Implement and evaluate a baseline before building the advanced version."),
+
+        unit("prototype", "Independent implementation · 5h", [
+          "Small end-to-end prototype",
+          "Clear component boundaries",
+          "Validation and controlled actions",
+          "Reproducible configuration"
+        ], [
+          "Which component choices are justified by the requirements?",
+          "How does the system behave on invalid input?",
+          "Can its actions exceed the user's intended authority?"
+        ], "Build the minimum complete workflow and record important design decisions."),
+
+        unit("assessment", "Evaluation and error analysis · 3h", [
+          "Quality against the baseline",
+          "Representative and difficult cases",
+          "Failure analysis",
+          "Latency, cost, and human-oversight observations"
+        ], [
+          "What evidence supports your conclusion?",
+          "Where does the system perform worse than the baseline?",
+          "Which limitations prevent broader deployment?"
+        ], "Write a comparison report including unsuccessful cases and uncertain results."),
+
+        unit("defense", "Documentation and technical defense · 2h", [
+          "Setup and reproduction instructions",
+          "Privacy and safety decisions",
+          "Known limitations and improvement plan",
+          "Reflection on application in your field or daily life"
+        ], [
+          "Can you defend the choice of model, metrics, and actions?",
+          "What would you change with better data or more time?",
+          "How will you apply this knowledge outside the course?"
+        ], "Demonstrate the project, defend your decisions, and write a short personal reflection.")
+      ],
+      project: "Design and Defend an AI Solution",
+      deliverables: [
+        "Problem statement and explicit AI justification.",
+        "Working prototype and reproducible repository.",
+        "Baseline comparison and evaluation report.",
+        "Failure analysis, operational observations, and improvement plan."
+      ],
+      defense: "Show independent judgment: choose appropriate complexity and support claims with evidence."
+    }
+  ];
+
+  const $ = id => document.getElementById(id);
+  const checkpointViews = new Map();
+  const moduleViews = new Map();
+
+  let progress = {};
+  let cloudReady = false;
+  let cloudOwner = false;
+  let currentUser = null;
+  let cloudSave = null;
+  let authAction = null;
+
+  const pending = new Set();
+  const cloudConfigured = Boolean(
+    FIREBASE_CONFIG.apiKey &&
+    FIREBASE_CONFIG.projectId &&
+    FIREBASE_CONFIG.authDomain &&
+    FIREBASE_CONFIG.appId
+  );
+
+  function element(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function setStatus(message) {
+    $("status").textContent = message;
+  }
+
+  function checkpointId(module, id) {
+    return `v2_${module.id}_${id}`;
+  }
+
+  function canEdit() {
+    return !cloudConfigured || (cloudReady && cloudOwner);
+  }
+
+  function addList(parent, heading, items, ordered = false) {
+    parent.append(element("h4", "", heading));
+    const list = element(ordered ? "ol" : "ul");
+    items.forEach(item => list.append(element("li", "", item)));
+    parent.append(list);
+  }
+
+  function createCompletion(id, parent, moduleId, isProject = false) {
+    const label = element("label", "completion-label");
+    const input = document.createElement("input");
+    input.type = "checkbox";
+
+    label.append(
+      input,
+      element("span", "", isProject
+        ? "Project complete: deliverables work, results are documented, and I can defend the decisions."
+        : "I can explain the questions, attempt the exercise, and describe at least one limitation.")
+    );
+
+    parent.append(label);
+
+    checkpointViews.set(id, {
+      input,
+      moduleId,
+      isProject,
+      unitElement: null
+    });
+
+    input.addEventListener("change", () => updateCheckpoint(id, input.checked));
+    return id;
+  }
+
+  let currentPart = "";
+
+  for (const [index, module] of curriculum.entries()) {
+    if (module.part !== currentPart) {
+      currentPart = module.part;
+      $("navigation").append(element("div", "nav-heading", module.part));
+    }
+
+    const navLink = element("a", "nav-link");
+    navLink.href = `#${module.id}`;
+    navLink.append(
+      element("span", "", String(index + 1).padStart(2, "0")),
+      element("span", "", module.title)
+    );
+    $("navigation").append(navLink);
+
+    const wrapper = element("section");
+    wrapper.dataset.part = module.part;
+
+    if (index === 0 || curriculum[index - 1].part !== module.part) {
+      wrapper.append(element("h3", "part-heading", module.part));
+    }
+
+    const details = element("details", "module glass");
+    details.id = module.id;
+    details.open = index === 0;
+
+    const summary = element("summary");
+    summary.append(element("span", "module-number", String(index + 1).padStart(2, "0")));
+
+    const title = element("div");
+    title.append(element("span", "module-name", module.title));
+
+    const meta = element("span", "module-meta");
+    title.append(meta);
+    summary.append(title);
+    details.append(summary);
+
+    const body = element("div", "module-body");
+    body.append(element("p", "module-intro", module.objective));
+
+    const unitViews = [];
+
+    for (const item of module.units) {
+      const id = checkpointId(module, item.id);
+      const unitDetails = element("details", "unit");
+
+      const unitSummary = element("summary");
+      const state = element("span", "unit-state", "•");
+      state.setAttribute("aria-hidden", "true");
+      unitSummary.append(state, element("span", "", item.title));
+      unitDetails.append(unitSummary);
+
+      const content = element("div", "unit-content");
+      const grid = element("div", "unit-grid");
+      const topics = element("div");
+      const questions = element("div");
+
+      addList(topics, "What you will learn", item.topics);
+      addList(questions, "Questions you must explain", item.questions, true);
+
+      grid.append(topics, questions);
+      content.append(grid);
+
+      const application = element("div", "application");
+      application.append(
+        element("strong", "", "Applied exercise: "),
+        document.createTextNode(item.exercise)
+      );
+      content.append(application);
+
+      createCompletion(id, content, module.id);
+      checkpointViews.get(id).unitElement = unitDetails;
+      checkpointViews.get(id).stateElement = state;
+
+      unitDetails.append(content);
+      body.append(unitDetails);
+
+      unitViews.push({
+        id,
+        node: unitDetails,
+        search: [
+          module.title, module.part, item.title,
+          ...item.topics, ...item.questions, item.exercise
+        ].join(" ").toLowerCase()
+      });
+    }
+
+    const project = element("section", "project");
+    project.append(
+      element("div", "eyebrow", "Chapter project · included in the 14-hour budget"),
+      element("h3", "", module.project)
+    );
+    addList(project, "Required deliverables", module.deliverables);
+
+    const defense = element("p", "");
+    defense.append(
+      element("strong", "", "Defense question: "),
+      document.createTextNode(module.defense)
+    );
+    project.append(defense);
+
+    const projectId = checkpointId(module, "project");
+    createCompletion(projectId, project, module.id, true);
+
+    body.append(project);
+    details.append(body);
+    wrapper.append(details);
+    $("curriculum").append(wrapper);
+
+    moduleViews.set(module.id, {
+      details, wrapper, meta, unitViews, project, projectId,
+      projectSearch: [
+        module.title, module.project, ...module.deliverables, module.defense
+      ].join(" ").toLowerCase()
+    });
+  }
+
+  function readLocalProgress() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "{}");
+      if (!saved || typeof saved !== "object" || Array.isArray(saved)) return {};
+      return Object.fromEntries(
+        Object.entries(saved).filter(([key, value]) =>
+          checkpointViews.has(key) && typeof value === "boolean")
+      );
+    } catch {
+      return {};
+    }
+  }
+
+  function render() {
+    const total = checkpointViews.size;
+    let completed = 0;
+    let completedModules = 0;
+
+    checkpointViews.forEach((view, id) => {
+      const done = progress[id] === true;
+      if (done) completed++;
+
+      view.input.checked = done;
+      view.input.disabled = !canEdit() || pending.has(id);
+
+      if (view.unitElement) {
+        view.unitElement.classList.toggle("complete", done);
+        view.stateElement.textContent = done ? "✓" : "•";
+      }
+    });
+
+    $("badges").replaceChildren();
+
+    curriculum.forEach(module => {
+      const group = [...checkpointViews.entries()]
+        .filter(([, view]) => view.moduleId === module.id);
+
+      const count = group.filter(([id]) => progress[id] === true).length;
+      const view = moduleViews.get(module.id);
+
+      view.meta.textContent =
+        `Weeks ${module.weeks} · 14 planned hours · ${count}/${group.length} checkpoints`;
+
+      if (count === group.length) {
+        completedModules++;
+        $("badges").append(
+          element("span", "badge", `✦ ${module.title}`)
+        );
+      }
+    });
+
+    const percent = Math.round(completed / total * 100);
+
+    $("percent").textContent = `${percent}%`;
+    $("xp").textContent = (completed * 10).toLocaleString();
+    $("mastered").textContent = `${completedModules}/12`;
+    $("overallProgress").value = percent;
+    $("progressLabel").textContent = `${completed} of ${total} checkpoints completed`;
+
+    $("rank").textContent =
+      percent === 100 ? "Grimoire Complete" :
+      percent >= 75 ? "System Architect" :
+      percent >= 40 ? "Model Knight" :
+      percent >= 15 ? "Apprentice Engineer" : "Initiate";
+
+    $("mode").textContent = !cloudConfigured
+      ? "Browser mode · this device only"
+      : !cloudReady
+        ? "Cloud mode · connecting"
+        : cloudOwner
+          ? "Cloud mode · owner"
+          : "Cloud mode · read-only visitor";
+
+    applyFilters();
+  }
+
+  function applyFilters() {
+    const query = $("search").value.trim().toLowerCase();
+    const filter = $("filter").value;
+    let visibleModules = 0;
+
+    function matchesState(id) {
+      const done = progress[id] === true;
+      return filter === "all" ||
+        (filter === "completed" && done) ||
+        (filter === "remaining" && !done);
+    }
+
+    moduleViews.forEach(view => {
+      let visible = 0;
+
+      view.unitViews.forEach(unitView => {
+        const show = unitView.search.includes(query) && matchesState(unitView.id);
+        unitView.node.hidden = !show;
+        if (show) {
+          visible++;
+          if (query) unitView.node.open = true;
+        }
+      });
+
+      const showProject = view.projectSearch.includes(query) &&
+        matchesState(view.projectId);
+
+      view.project.hidden = !showProject;
+      if (showProject) visible++;
+
+      view.wrapper.hidden = visible === 0;
+      if (visible) {
+        visibleModules++;
+        if (query || filter !== "all") view.details.open = true;
+      }
+    });
+
+    $("emptyMessage").hidden = visibleModules > 0;
+  }
+
+  async function updateCheckpoint(id, checked) {
+    if (!canEdit()) {
+      render();
+      return;
+    }
+
+    if (!cloudConfigured) {
+      progress[id] = checked;
+      try {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(progress));
+        setStatus("Saved in this browser. This progress is not shared with other devices.");
+      } catch {
+        setStatus("Browser storage is unavailable. Changes are temporary; export progress before leaving.");
+      }
+      render();
+      return;
+    }
+
+    pending.add(id);
+    render();
+    setStatus("Saving to your shared grimoire…");
+
+    try {
+      await cloudSave(id, checked);
+      setStatus("Saved to Firebase.");
+    } catch (error) {
+      setStatus(`Save failed: ${error.message}`);
+    } finally {
+      pending.delete(id);
+      render();
+    }
+  }
+
+  $("search").addEventListener("input", applyFilters);
+  $("filter").addEventListener("change", applyFilters);
+
+  $("continueButton").addEventListener("click", () => {
+    $("search").value = "";
+    $("filter").value = "all";
+    applyFilters();
+
+    const next = [...checkpointViews.entries()]
+      .find(([id]) => progress[id] !== true);
+
+    if (!next) {
+      setStatus("Every checkpoint is complete. Defend your final project—and choose your next specialization.");
+      return;
+    }
+
+    const [, view] = next;
+    const moduleView = moduleViews.get(view.moduleId);
+    moduleView.details.open = true;
+    if (view.unitElement) view.unitElement.open = true;
+
+    const target = view.unitElement || moduleView.project;
+    target.scrollIntoView({
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "center"
+    });
+  });
+
+  $("exportButton").addEventListener("click", () => {
+    const data = {
+      course: "AI Engineering Grimoire",
+      version: 2,
+      exportedAt: new Date().toISOString(),
+      mode: cloudConfigured ? "cloud" : "browser",
+      progress: Object.fromEntries(
+        [...checkpointViews.keys()].map(id => [id, progress[id] === true])
+      )
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json"
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "ai-grimoire-progress.json";
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setStatus("Progress exported as JSON. Keep the file as a backup.");
+  });
+
+  $("shareButton").addEventListener("click", async () => {
+    const local = location.protocol === "file:" ||
+      ["localhost", "127.0.0.1", "::1", "[::1]"].includes(location.hostname);
+
+    if (local) {
+      const message = "Publish index.html with GitHub Pages first. A local address is not a public share link.";
+      setStatus(message);
+      alert(message);
+      return;
+    }
+
+    const url = location.origin + location.pathname;
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setStatus(cloudConfigured
+        ? "Link copied. Visitors can see shared cloud progress; only the owner can edit."
+        : "Link copied. Visitors can read the curriculum, but browser-mode progress is not shared.");
+    } catch {
+      window.prompt("Copy this website address:", url);
+    }
+  });
+
+  $("authButton").addEventListener("click", async () => {
+    if (!cloudConfigured) {
+      const message =
+        "Cloud setup: fill FIREBASE_CONFIG and OWNER_UID in index.html, enable Google sign-in, and publish the Firestore rules. Until then, progress saves only in this browser.";
+      setStatus(message);
+      alert(message);
+      return;
+    }
+
+    if (!authAction) {
+      setStatus("Firebase sign-in is not ready. Check the connection message and browser Console.");
+      return;
+    }
+
+    try {
+      await authAction();
+    } catch (error) {
+      setStatus(`Sign-in action failed: ${error.message}`);
+    }
+  });
+
+  if (!cloudConfigured) {
+    progress = readLocalProgress();
+    render();
+    setStatus(
+      "Browser mode is active. Checkpoints save automatically here. Configure Firebase only when you want shared progress."
+    );
+  } else {
+    render();
+    setStatus("Connecting to Firebase…");
+    $("authButton").textContent = "Connecting…";
+
+    try {
+      const { initializeApp } = await import(
+        "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js"
+      );
+
+      const {
+        getFirestore, doc, onSnapshot, setDoc, serverTimestamp
+      } = await import(
+        "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js"
+      );
+
+      const {
+        getAuth, GoogleAuthProvider, signInWithPopup,
+        signOut, onAuthStateChanged
+      } = await import(
+        "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js"
+      );
+
+      const app = initializeApp(FIREBASE_CONFIG);
+      const db = getFirestore(app);
+      const auth = getAuth(app);
+      const reference = doc(db, "courses", "ai-engineering");
+
+      authAction = async () => {
+        if (currentUser) await signOut(auth);
+        else await signInWithPopup(auth, new GoogleAuthProvider());
+      };
+
+      $("authButton").textContent = "Owner sign in";
+
+      onAuthStateChanged(auth, user => {
+        currentUser = user;
+        cloudOwner = Boolean(user && OWNER_UID && user.uid === OWNER_UID);
+        $("authButton").textContent = user ? "Sign out" : "Owner sign in";
+        render();
+
+        if (user && !OWNER_UID) {
+          setStatus(`Owner setup: your UID is ${user.uid}. Add it to OWNER_UID and your Firestore rules.`);
+        } else if (user && !cloudOwner) {
+          setStatus("Signed in as a viewer. This account is not the configured owner.");
+        }
+      });
+
+      cloudSave = async (id, checked) => {
+        await setDoc(reference, {
+          progress: { [id]: checked },
+          updatedAt: serverTimestamp(),
+          updatedBy: auth.currentUser.uid
+        }, { merge: true });
+      };
+
+      onSnapshot(reference, { includeMetadataChanges: true }, snapshot => {
+        const received = snapshot.exists() ? snapshot.data().progress : {};
+        progress = received && typeof received === "object" ? received : {};
+        cloudReady = true;
+        render();
+
+        if (currentUser && !OWNER_UID) {
+          setStatus(`Owner setup: your UID is ${currentUser.uid}. Add it to the file and database rules.`);
+          return;
+        }
+
+        setStatus(
+          snapshot.metadata.hasPendingWrites
+            ? "Saving changes…"
+            : snapshot.metadata.fromCache
+              ? "Showing cached progress. Waiting for a server connection."
+              : "Live cloud progress loaded. Visitors are read-only; the authorized owner can edit."
+        );
+      }, error => {
+        cloudReady = false;
+        render();
+        setStatus(`Progress could not load: ${error.message}. Check Firestore rules. Sign-in can still work.`);
+      });
+    } catch (error) {
+      $("authButton").textContent = "Cloud unavailable";
+      setStatus(`Firebase could not start: ${error.message}. Check configuration, internet access, and the browser Console.`);
+    }
+  }
+</script>
+</body>
+</html>
